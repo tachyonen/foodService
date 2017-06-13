@@ -1,5 +1,6 @@
 package com.example.rest;
 
+
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -10,24 +11,21 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-
-
-@Path("/ProductIkoy")
-public class ProductIkoyService {
+@Path("/ProductBestWoscht")
+public class ProductBestWoschtService {
 	
-	private final CopyOnWriteArrayList<ProductIkoy> pIkList = ProductListIKoy.getInstance();
+	private final CopyOnWriteArrayList<ProductBestWoscht> pBeList = ProductListBestWoscht.getInstance();
 	
-	 @GET
+	@GET
 	  @Path("/all")
 	  @Produces(MediaType.TEXT_PLAIN)
-	  public String getAllIkoyProducts() {
-	    return "--- iKoy Menue ---\n"
-	        + pIkList.stream()
+	  public String getAllBestWoschtProducts() {
+	    return "--- Menue Best Woscht in Town ---\n"
+	        + pBeList.stream()
 	        .map(c -> c.toString())
 	        .collect(Collectors.joining("\n"));
 	  }
-	 
-	 
+	
 	 @POST
 	 @Path("/order")
 	 @Produces(MediaType.APPLICATION_JSON)
@@ -43,13 +41,12 @@ public class ProductIkoyService {
 	 }
 	 
 	 
-	 
 	 @GET
 	  @Path("{id}")
 	  @Produces(MediaType.TEXT_PLAIN)
 	  public String getProduct(@PathParam("id") long id) {
-	    Optional<ProductIkoy> match
-	        = pIkList.stream()
+	    Optional<ProductBestWoscht> match
+	        = pBeList.stream()
 	        .filter(c -> c.getId() == id)
 	        .findFirst();
 	    
@@ -59,6 +56,5 @@ public class ProductIkoyService {
 	      return "Customer not found";
 	    }
 	  }
-	
 
 }

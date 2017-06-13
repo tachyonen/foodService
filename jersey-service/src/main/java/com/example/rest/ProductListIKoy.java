@@ -10,14 +10,30 @@ public class ProductListIKoy {
 		
 		pIkList.add(
 			new ProductIkoy.ProductIkoyBuilder().id()
-			.name("shshi1")
-			.info("leckeres Sushi")
+			.name("California Maki")
+			.info("California Roll")
 			.prize(9)
 			.volume(1)
 			.build()
 				
 				);
-		
+		pIkList.add(
+			new ProductIkoy.ProductIkoyBuilder().id()
+			.name("Sake")
+			.info("Nigiri Lachs")
+			.prize(8)
+			.volume(1)
+			.build()
+				);
+		pIkList.add(
+			new ProductIkoy.ProductIkoyBuilder().id()
+			 .name("Maguro")
+			 .info("Nigiri Tuhnfisch")
+			 .prize(5)
+			 .volume(1)
+			 .build()
+			
+				);
 		
 	}
 	

@@ -64,8 +64,11 @@ public class ProductIkoy {
 
 	@Override
 	public String toString() {
-		return "ID: " + id + "Name: " + name + "\n" + "Info: " + info + "\n" + "Prize: " + prize + "\n" + "Volume: "
-				+ volume + "\n";
+		return "ID: " + id 
+				+ "Name: " + name + "\n" 
+				+ "Info: " + info + "\n" 
+				+ "Prize: " + prize + "\n"
+				+ "Volume: "+ volume + "\n";
 	}
 
 	public static class ProductIkoyBuilder {
