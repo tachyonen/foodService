@@ -8,6 +8,7 @@ public class ProductListBestWoscht {
 	private static final CopyOnWriteArrayList<ProductBestWoscht> pBeList = new CopyOnWriteArrayList<>();
 
 	static{
+		
 	pBeList.add(
 			new ProductBestWoscht.ProductBestWoschtBuilder().id()
 			.name("Bratwurst")

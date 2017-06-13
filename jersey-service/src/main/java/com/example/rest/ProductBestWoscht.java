@@ -75,6 +75,17 @@ public class ProductBestWoscht {
 		
 	}
 	
+	
+	
+	@Override
+	public String toString(){
+		return "ID: " + this.id + "\n"
+				+ "Name: " + this.name + "\n"
+				+ "Info: " + this.info + "\n"
+				+ "Prize: " + this.prize + "\n"
+				+ "Volume: "+ this.volume + "\n";
+	}
+	
 	public static class ProductBestWoschtBuilder{
 		private long id;
 		private String name = "";
@@ -107,21 +118,14 @@ public class ProductBestWoscht {
 			return this;
 		}
 		public ProductBestWoschtBuilder volume( float volume){
-			this.volume = this.volume;
+			this.volume = volume;
 			return this;
 		}
 		public ProductBestWoscht build(){
 			return new ProductBestWoscht(this);
 		}
 		
-		@Override
-		public String toString(){
-			return "ID: " + id + "\n"
-					+ "Name: " + name + "\n"
-					+ "Info: " + info + "\n"
-					+ "Prize: " + prize + "\n"
-					+ "Volume: "+ volume + "\n";
-		}
+		
 		
 	}
 }
