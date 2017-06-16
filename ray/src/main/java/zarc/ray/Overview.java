@@ -25,7 +25,7 @@ public class Overview {
 	    String txt = new String();
 		Set<Long> keys = Database.rest.keySet();
         for(Long key: keys){
-          txt += Database.rest.get(key).toString();
+          txt += Database.rest.get(key).toStringwithRef() + "<br>";
         }
 
 		

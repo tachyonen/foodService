@@ -16,9 +16,21 @@ public class Restaurant {
 		this.name = name;
 		this.open = open;
 	}
+	
 	@Override 
 	public String toString() {
-		return "ID: " + id
-				+ "\nName: " + name;
+		return "ID: " + id + "\n"
+		  + "\nName: " + name + "\n";
+	}
+	
+	public String toStringwithRef() {
+		String id = String.valueOf(this.id);
+		String link = "http://localhost:8080/ray/webapi/restaurant/" + id;
+		String a = "<a href=\"" + link + "\"" + ">" + this.name + "</a>";
+		return id + "\n" + a;
+	}
+	
+	public boolean getOpen(){
+		return this.open;
 	}
 }
