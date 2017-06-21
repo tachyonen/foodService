@@ -1,4 +1,8 @@
 package zarc.ray;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.Cookie;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -6,7 +10,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
+
+import controller.Database;
+
 import javax.ws.rs.container.PreMatching;
+import javax.ws.rs.core.*;
  
 /**
  * Jersey HTTP Basic Auth filter
@@ -25,12 +33,32 @@ public class AuthFilter implements ContainerRequestFilter {
         String method = containerRequest.getMethod();
         // myresource/get/56bCA for example
         String path = containerRequest.getUriInfo().getPath(true);
-       System.out.println(path); 
-         if(1 == 1){return;}
        
+        
+			if(Database.doesCustomerExist(containerRequest.getHeaderString("e-mail"), containerRequest.getHeaderString("passwort"))) {
+				System.out.println("Stanby");
+				return;
+			}
+		
         //We do allow wadl to be retrieve
-        if(method.equals("GET") && (path.equals("application.wadl") || path.equals("login") || path.equals("registration"))) {
+        if(/*(method.equals("GET") &&*/ (path.equals("application.wadl") || path.equals("login") || path.equals("registration"))) {
             return;
+        }
+        else {
+        	try {
+        	
+        	String email = containerRequest.getCookies().get("E-Mail").getValue();
+        	String passwort = containerRequest.getCookies().get("Passwort").getValue();
+        	if(Database.doesCustomerExist(email, passwort) == true) return;
+        	} catch (Exception e) {
+        		throw new WebApplicationException(Status.UNAUTHORIZED);
+			}
+        }
+        
+        Map<String, javax.ws.rs.core.Cookie> cookies = containerRequest.getCookies();
+        Set<String> keys = cookies.keySet();
+        for(String key: keys){
+            System.out.println("Value of "+key+" is: "+cookies.get(key).getValue());
         }
  
         //Get the authentification passed in HTTP headers parameters
