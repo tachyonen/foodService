@@ -3,12 +3,19 @@ package model;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Restaurant {
 
 	private static long counter = 0;
-	private final long id;
+	private long id;
 	private String companyName;
 	private String adress;
 	private String phoneNumber;
@@ -17,14 +24,8 @@ public class Restaurant {
 	private boolean isOpen;
 	private Hashtable<Long, Product> productList;
 
-	public Restaurant(Restaurant rest) {
-		this.id = rest.id;
-		this.companyName = rest.companyName;
-		this.adress = rest.adress;
-		this.phoneNumber = rest.phoneNumber;
-		this.eMail = rest.eMail;
-		this.passwort = rest.passwort;
-		this.productList = rest.productList;
+	public Restaurant() {
+
 	}
 
 	public Restaurant(String companyName, String adress, String phoneNumber, String eMail, String passwort,
@@ -39,22 +40,11 @@ public class Restaurant {
 		this.productList = new Hashtable<>();
 	}
 
-	public Restaurant(String companyName, String adress, String phoneNumber, String eMail, String passwort,
-			boolean isOpen, Hashtable<Long, Product> productList) {
-		this.id = Restaurant.counter++;
-		this.companyName = companyName;
-		this.adress = adress;
-		this.phoneNumber = phoneNumber;
-		this.eMail = eMail;
-		this.passwort = passwort;
-		this.isOpen = isOpen;
-		this.productList = productList;
-	}
-
 	public String getCompanyName() {
 		return companyName;
 	}
 
+	@XmlElement
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
@@ -63,6 +53,7 @@ public class Restaurant {
 		return adress;
 	}
 
+	@XmlElement
 	public void setAdress(String adress) {
 		this.adress = adress;
 	}
@@ -71,6 +62,7 @@ public class Restaurant {
 		return phoneNumber;
 	}
 
+	@XmlElement
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
@@ -79,6 +71,7 @@ public class Restaurant {
 		return eMail;
 	}
 
+	@XmlElement
 	public void seteMail(String eMail) {
 		this.eMail = eMail;
 	}
@@ -87,6 +80,7 @@ public class Restaurant {
 		return passwort;
 	}
 
+	@XmlElement
 	public void setPasswort(String passwort) {
 		this.passwort = passwort;
 	}
@@ -95,6 +89,7 @@ public class Restaurant {
 		return id;
 	}
 
+	@XmlElement
 	public boolean isOpen() {
 		return isOpen;
 	}
@@ -122,15 +117,31 @@ public class Restaurant {
 		}
 		return productList;
 	}
-	
+
 	public void addProduct(Product e) {
 		this.productList.put(e.getId(), e);
 	}
-	
+
 	public Product getProduct(long key) {
 		return this.productList.get(key);
 	}
-	
-	
+
+	@Override
+	public boolean equals(Object object) {
+		if (object == null) {
+			return false;
+		} else if (object instanceof Restaurant) {
+			Restaurant restaurant = (Restaurant) object;
+			if (restaurant.getId() == this.getId())
+				return true;
+		}
+		return false;
+
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.id);
+	}
 
 }

@@ -18,82 +18,95 @@ import javax.xml.crypto.Data;
 
 import controller.Database;
 import model.Customer;
+import model.Order;
 import model.Product;
+import model.Restaurant;
 import model.ShoppingBasket;
 
 @Path("/restaurants")
 public class CustomerService {
 
-
-	@GET /*Auflisten aller Restaurants in der Datenbank*/
-	@Path("/all")
+	@GET /* Auflisten aller Restaurants in der Datenbank */
+	@Path("all")
 	@Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
 	public String getAll() {
 		return Database.rest.toString();
 	}
 
-	@GET /*Ausgabe eines bestimmten Produktes von einem bestimmten Restaurant*/
+	@GET /*
+			 * Ausgabe eines bestimmten Produktes von einem bestimmten
+			 * Restaurant
+			 */
 	@Path("{CompanyID}/{ProductID}")
-	@Produces(javax.ws.rs.core.MediaType.TEXT_HTML)
-	public String getProductFromRestaurant(@PathParam("CompanyID") long CompanyID, @PathParam("ProductID") long ProductID) {
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_XML)
+	public Product getProductFromRestaurant(@PathParam("CompanyID") long CompanyID,
+			@PathParam("ProductID") long ProductID) {
 
-		return Database.getRestaurant(CompanyID).getProduct(ProductID).toString();
+		Product product = Database.getRestaurant(CompanyID).getProduct(ProductID);
+		return product;
+
 	}
-	
-	@GET /*Auflistung eines bestimmten Restaurants*/
+
+	@GET /* Auflistung eines bestimmten Restaurants */
 	@Path("{CompanyID}")
-	@Produces(javax.ws.rs.core.MediaType.TEXT_HTML)
-	public String getProductFromRestaurant(@PathParam("CompanyID") long CompanyID) {
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_XML)
+	public Restaurant getRestaurant(@PathParam("CompanyID") long CompanyID) {
 
-		String a = "<form method=\"post\">";
-		a += "Which product do you want to add:<br>";
-		a += "<input type=\"text\" name=\"ProductID\"><br>";
-		a += "<input type=\"submit\" value=\"Submit\">";
-		a += "</form>";
-		return Database.getRestaurant(CompanyID).toString();
+		Restaurant restaurant = Database.getRestaurant(CompanyID);
+		return restaurant;
+
 	}
 
-
-
-	@POST /*Hinzufügen eines bestimmten Produktes vom einem bestimmten Restaurant in den Shopping basket*/
+	@POST /*
+			 * Hinzufügen eines bestimmten Produktes vom einem bestimmten
+			 * Restaurant in den Shopping basket
+			 */
 	@Path("{CompanyID}")
 	@Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
-	public String addProdukt(@Context ContainerRequestContext crc, @PathParam("CompanyID") long CompanyID, @HeaderParam("ProductID") long ProductID) {
-		
-		String email = (String) crc.getProperty("E-Mail");
-		String passwort = (String) crc.getProperty("Passwort");
+	public String addProductToBasket(@Context ContainerRequestContext crc, @PathParam("CompanyID") long CompanyID,
+			@HeaderParam("ProductID") long ProductID, String email2, String passwort2) {
+
+		String email;
+		String passwort;
+		if (crc == null) {
+			email = email2;
+			passwort = passwort2;
+		} else {
+			email = (String) crc.getProperty("E-Mail");
+			passwort = (String) crc.getProperty("Passwort");
+		}
+
 		Customer customer = Database.getCustomer(email, passwort);
-		
+
 		customer.addProductToBasket(Database.getRestaurant(CompanyID).getProduct(ProductID));
 		return "Product has been added";
 	}
 
-	
-	@DELETE /*Löschen eines bestimmten Produkt im Basket*/
+	@DELETE /* Löschen eines bestimmten Produkt im Basket */
 	@Path("{CompanyID}")
 	@Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
-	public String removeProdukt(@Context ContainerRequestContext crc, @PathParam("CompanyID") long CompanyID, @HeaderParam("ProductID") long ProductID) {
+	public String removeProdukt(@Context ContainerRequestContext crc, @PathParam("CompanyID") long CompanyID,
+			@HeaderParam("ProductID") long ProductID) {
 
 		String email = (String) crc.getProperty("E-Mail");
 		String passwort = (String) crc.getProperty("Passwort");
 		Customer customer = Database.getCustomer(email, passwort);
-		
+
 		customer.removeProductFromBasket(Database.getRestaurant(CompanyID).getProduct(ProductID));
-		
+
 		return "Product has been removed";
 	}
 
-	
-	@PUT /*Ersetzen eines bestimmten Produkt im Basket mit einem Anderem*/
+	@PUT /* Ersetzen eines bestimmten Produkt im Basket mit einem Anderem */
 	@Path("{CompanyID}")
 	@Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
-	public String removeProdukt(@Context ContainerRequestContext crc, @PathParam("CompanyID") Long CompanyID, @HeaderParam("NewProductID") Long NewProductID, @HeaderParam("OldProductID") Long OldProductID) {
-		
+	public String removeProdukt(@Context ContainerRequestContext crc, @PathParam("CompanyID") Long CompanyID,
+			@HeaderParam("NewProductID") Long NewProductID, @HeaderParam("OldProductID") Long OldProductID) {
+
 		String email = (String) crc.getProperty("E-Mail");
 		String passwort = (String) crc.getProperty("Passwort");
 		Customer customer = Database.getCustomer(email, passwort);
-		
-		
+
 		Product x = Database.getRestaurant(CompanyID).getProduct(OldProductID);
 		Product y = Database.getRestaurant(CompanyID).getProduct(NewProductID);
 		customer.changeProductsinBasket(x, y);
